@@ -5,7 +5,7 @@ module.exports = function(grunt) {
 
     // Browserify front-end modules
     browserify: {
-      options: { 
+      options: {
         browserifyOptions: {
           debug: true
         }
@@ -66,12 +66,20 @@ module.exports = function(grunt) {
       }
     },
 
-    // Run dev watch tasks (and others potentially) concurrently 
+    // Run dev watch tasks (and others potentially) concurrently
     concurrent: {
       dev: {
         tasks: ['watch', 'nodemon'],
         options: {
           logConcurrentOutput: true
+        }
+      }
+    },
+
+    uglify: {
+      my_target: {
+        files: {
+          'public/app.min.js' : 'public/app.js'
         }
       }
     }
@@ -85,13 +93,14 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-nodemon');
   grunt.loadNpmTasks('grunt-concurrent');
   grunt.loadNpmTasks('grunt-shell');
+  grunt.loadNpmTasks('grunt-contrib-uglify');
 
   // Default is running the local development server
   grunt.registerTask('default', ['sass:dev', 'browserify', 'concurrent:dev']);
 
   // Build production assets
-  grunt.registerTask('collect_static', 
-    ['init_static', 'sass:dist', 'browserify']);
+  grunt.registerTask('collect_static',
+    ['init_static', 'sass:dist', 'browserify', 'uglify']);
 
   // Custom tasks
   grunt.loadTasks('bin/tasks');
